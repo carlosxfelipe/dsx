@@ -10,8 +10,9 @@ class StyleSheet {
   String className(String key) => classes[key] ?? '';
   dynamic operator [](String key) => raw[key];
 
-  Map<String, dynamic> get button => raw['button'] ?? const {};
+  Map<String, dynamic> get container => raw['container'] ?? const {};
   Map<String, dynamic> get card => raw['card'] ?? const {};
+  Map<String, dynamic> get button => raw['button'] ?? const {};
 
   static StyleElement _styleEl() {
     const id = '__dsx_styles__';

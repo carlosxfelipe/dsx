@@ -3,7 +3,12 @@ import 'package:dsx_runtime/runtime.dart';
 {
   final count = signal(0);
 
-  final dynamic styles = StyleSheet.create({
+  final StyleSheet styles = StyleSheet.create({
+    'container': {
+      'background': '#f8fafc',
+      'padding': '40px',
+      'min-height': '100vh'
+    },
     'card': {
       'background': '#fff',
       'border': '1px solid #e5e7eb',
@@ -25,10 +30,20 @@ import 'package:dsx_runtime/runtime.dart';
   });
 }
 
-<div style={styles.card}>
-  <h1>Contador</h1>
-  <p>Valor: {count()}</p>
-  <button style={styles.button} onClick={() => count.set(count() - 1)}>-1</button>
-  <button style={styles.button} onClick={() => count.set(count() + 1)}>+1</button>
-  <button style={styles.button} onClick={() => count.set(0)}>reset</button>
+<div style={styles.container}>
+  <div style={styles.card}>
+    <h1>Contador</h1>
+    <p>Valor: {count()}</p>
+    <button style={styles.button} onClick={() => count.set(count() - 1)}>-1</button>
+    <button style={styles.button} onClick={() => count.set(count() + 1)}>+1</button>
+    <button style={styles.button} onClick={() => count.set(0)}>reset</button>
+  </div>
+
+  <div style={{ 'text-align': 'center', 'margin-top': '20px' }}>
+    <a href="https://github.com/carlosxfelipe/dsx"
+       style={{ 'color': 'blue', 'font-size': '18px', 'text-decoration': 'underline' }}>
+      Visite o repositório
+    </a>
+  </div>
 </div>
+
