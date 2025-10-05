@@ -19,3 +19,8 @@ node_modules/
 npm-debug.log*
 coverage/
 report/
+
+# Generated artifacts
+# Ignore all generated code and compiled JS
+packages/**/gen/
+packages/**/web/app.js*

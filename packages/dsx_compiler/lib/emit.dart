@@ -5,13 +5,13 @@ String emitDart(Program prog, {String fnName = 'View'}) {
   for (final line in prog.prelude) {
     b.writeln(line.trimRight());
   }
-  if (!prog.prelude.any((l) => l.contains("package:dsx_runtime/runtime.dart"))) {
+  if (!prog.prelude
+      .any((l) => l.contains("package:dsx_runtime/runtime.dart"))) {
     b.writeln("import 'package:dsx_runtime/runtime.dart';");
   }
   b.writeln('');
   b.writeln('NodeLike $fnName() {');
 
-  // HOIST: Interp top-level com ; ou múltiplas linhas
   final uiNodes = <Node>[];
   for (final n in prog.body) {
     if (n is Interp) {
@@ -47,8 +47,11 @@ String emitDart(Program prog, {String fnName = 'View'}) {
 String _emitNode(Node n) {
   if (n is Text) {
     final t = n.text
-      .replaceAll(r'\\', r'\\\\')
-      .replaceAll("'", r"\\'");
+        .replaceAll(r'\', r'\\')
+        .replaceAll("'", r"\'")
+        .replaceAll('\n', r'\n')
+        .replaceAll('\r', r'\r')
+        .replaceAll('\t', r'\t');
     return "text('$t')";
   } else if (n is Interp) {
     final expr = n.expr.replaceAll('\n', ' ').trim();
@@ -58,15 +61,17 @@ String _emitNode(Node n) {
     for (final a in n.attrs) {
       if (a.expr != null) {
         if (a.isEvent) {
-          // FIX: se a expressão renderiza um closure () => ..., chamamos ao clicar
           props.add("'${a.name}': (e) => ((${a.expr})())");
         } else {
           props.add("'${a.name}': (${a.expr})");
         }
       } else {
         final v = (a.value ?? 'true')
-          .replaceAll(r'\\', r'\\\\')
-          .replaceAll("'", r"\\'");
+            .replaceAll(r'\', r'\\')
+            .replaceAll("'", r"\'")
+            .replaceAll('\n', r'\n')
+            .replaceAll('\r', r'\r')
+            .replaceAll('\t', r'\t');
         props.add("'${a.name}': '$v'");
       }
     }
