@@ -150,15 +150,9 @@ class StyleSheet {
   Map<String, dynamic> style(String key) => raw[key] ?? const {};
   String className(String key) => classes[key] ?? '';
   dynamic operator [](String key) => raw[key];
-  @override
-  dynamic noSuchMethod(Invocation i) {
-    if (i.isGetter) {
-      final s = i.memberName.toString();
-      final name = s.startsWith('Symbol("') ? s.substring(8, s.length - 2) : s;
-      return raw[name];
-    }
-    return super.noSuchMethod(i);
-  }
+
+  Map<String, dynamic> get button => raw['button'] ?? const {};
+  Map<String, dynamic> get card => raw['card'] ?? const {};
 
   static StyleElement _styleEl() {
     const id = '__dsx_styles__';
