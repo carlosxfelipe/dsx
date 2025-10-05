@@ -93,19 +93,27 @@ void _render(NodeLike n, Node parent) {
       } else if (key == 'className') {
         el.setAttribute('class', '$value');
       } else if (key == 'style') {
-        if (value is Map) {
+        dynamic v = value;
+        if (v is List) {
+          final merged = <String, dynamic>{};
+          for (final part in v) {
+            if (part is Map) merged.addAll(Map<String, dynamic>.from(part));
+          }
+          v = merged;
+        }
+        if (v is Map) {
           final css = StringBuffer();
-          value.forEach((k, v) {
-            if (v == null) return;
-            if (v is num) {
-              css.write('$k:${v}px;');
+          v.forEach((k, v2) {
+            if (v2 == null) return;
+            if (v2 is num) {
+              css.write('$k:${v2}px;');
             } else {
-              css.write('$k:$v;');
+              css.write('$k:$v2;');
             }
           });
           el.setAttribute('style', css.toString());
-        } else if (value != null) {
-          el.setAttribute('style', '$value');
+        } else if (v != null) {
+          el.setAttribute('style', '$v');
         }
       } else {
         el.setAttribute(key, '$value');
@@ -136,7 +144,21 @@ void _render(NodeLike n, Node parent) {
 class StyleSheet {
   static final _rules = <String>{};
   final Map<String, String> classes;
-  StyleSheet._(this.classes);
+  final Map<String, Map<String, dynamic>> raw;
+  StyleSheet._(this.classes, this.raw);
+
+  Map<String, dynamic> style(String key) => raw[key] ?? const {};
+  String className(String key) => classes[key] ?? '';
+  dynamic operator [](String key) => raw[key];
+  @override
+  dynamic noSuchMethod(Invocation i) {
+    if (i.isGetter) {
+      final s = i.memberName.toString();
+      final name = s.startsWith('Symbol("') ? s.substring(8, s.length - 2) : s;
+      return raw[name];
+    }
+    return super.noSuchMethod(i);
+  }
 
   static StyleElement _styleEl() {
     const id = '__dsx_styles__';
@@ -185,6 +207,7 @@ class StyleSheet {
 
   static StyleSheet create(Map<String, dynamic> spec) {
     final classes = <String, String>{};
+    final raw = <String, Map<String, dynamic>>{};
     final styleEl = _styleEl();
     spec.forEach((logical, block) {
       if (logical.startsWith('@media')) {
@@ -200,13 +223,14 @@ class StyleSheet {
         final key = buf.toString();
         if (_rules.add(key)) styleEl.appendText(key);
       } else {
-        final style = block as Map<String, dynamic>;
+        final style = Map<String, dynamic>.from(block as Map<String, dynamic>);
+        raw[logical] = style;
         final sig = '$logical|${style.toString()}';
         final cls = 'c${_hash(sig)}';
         classes[logical] = cls;
         _emitRule('.$cls', style, styleEl);
       }
     });
-    return StyleSheet._(classes);
+    return StyleSheet._(classes, raw);
   }
 }

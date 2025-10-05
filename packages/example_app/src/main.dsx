@@ -3,7 +3,7 @@ import 'package:dsx_runtime/runtime.dart';
 {
   final count = signal(0);
 
-  final styles = StyleSheet.create({
+  final dynamic styles = StyleSheet.create({
     'card': {
       'background': '#fff',
       'border': '1px solid #e5e7eb',
@@ -25,10 +25,10 @@ import 'package:dsx_runtime/runtime.dart';
   });
 }
 
-<div class={styles.classes['card']}>
+<div style={styles.card}>
   <h1>Contador</h1>
   <p>Valor: {count()}</p>
-  <button class={styles.classes['button']} onClick={() => count.set(count() - 1)}>-1</button>
-  <button class={styles.classes['button']} onClick={() => count.set(count() + 1)}>+1</button>
-  <button class={styles.classes['button']} onClick={() => count.set(0)}>reset</button>
+  <button style={styles.button} onClick={() => count.set(count() - 1)}>-1</button>
+  <button style={styles.button} onClick={() => count.set(count() + 1)}>+1</button>
+  <button style={styles.button} onClick={() => count.set(0)}>reset</button>
 </div>
