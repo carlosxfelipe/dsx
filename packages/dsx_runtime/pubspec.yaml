@@ -1,0 +1,5 @@
+name: dsx_runtime
+description: Minimal runtime (signals + tiny DOM renderer) for DSX experiments.
+version: 0.0.6
+environment:
+  sdk: '>=3.3.0 <4.0.0'

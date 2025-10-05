@@ -1,0 +1,11 @@
+name: example_app
+description: Example app using dsx_compiler (Step Two Complete Fixed).
+version: 0.0.6
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+dependencies:
+  dsx_runtime:
+    path: ../dsx_runtime
+dev_dependencies:
+  dsx_compiler:
+    path: ../dsx_compiler

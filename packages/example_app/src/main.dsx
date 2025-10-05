@@ -1,0 +1,14 @@
+import 'package:dsx_runtime/runtime.dart';
+
+{
+// Dart zone: aqui você pode declarar variáveis em Dart
+  final count = signal(0);
+}
+
+<div class="card">
+  <h1>Contador</h1>
+  <p>Valor: {count()}</p>
+  <button onClick={() => count.set(count() - 1)}>-1</button>
+  <button onClick={() => count.set(count() + 1)}>+1</button>
+  <button onClick={() => count.set(0)}>reset</button>
+</div>
